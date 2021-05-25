@@ -11,15 +11,22 @@ namespace MessagePipePlayground
         private readonly ISubscriber<MyEvent> _subscriber;
         private readonly IDisposable _disposable;
 
+        public List<MyEvent> Events { get; } = new List<MyEvent>();
+
         public Consumer(ISubscriber<MyEvent> subscriber)
         {
             var bag = DisposableBag.CreateBuilder();
 
             _subscriber = subscriber;
 
-            _subscriber.Subscribe(@event => Trace.WriteLine(@event)).AddTo(bag);
+            _subscriber.Subscribe(Events.Add).AddTo(bag);
 
             _disposable = bag.Build();
+        }
+
+        public Consumer()
+        {
+            Events = new List<MyEvent>();
         }
 
         public void Dispose()

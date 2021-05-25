@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace MessagePipePlayground.Sandbox
 {
-    internal sealed class FreeList<T> : IDisposable
+    public sealed class FreeList<T> : IDisposable
         where T : class
     {
         const int InitialCapacity = 4;

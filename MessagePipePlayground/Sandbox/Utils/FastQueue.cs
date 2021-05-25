@@ -6,7 +6,7 @@ using System.Text;
 namespace MessagePipePlayground.Sandbox
 {
     // fixed size queue.
-    internal class FastQueue<T>
+    public class FastQueue<T>
     {
         T[] array;
         int head;

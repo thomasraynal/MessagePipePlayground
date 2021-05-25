@@ -9,12 +9,11 @@ namespace MessagePipePlayground.Sandbox
     public sealed class MessageBroker<TKey, TMessage> : IPublisher<TKey, TMessage>, ISubscriber<TKey, TMessage> where TKey : notnull
     {
         readonly MessageBrokerCore<TKey, TMessage> core;
-        readonly FilterAttachedMessageHandlerFactory handlerFactory;
 
-        public MessageBroker(MessageBrokerCore<TKey, TMessage> core, FilterAttachedMessageHandlerFactory handlerFactory)
+
+        public MessageBroker(MessageBrokerCore<TKey, TMessage> core)
         {
             this.core = core;
-            this.handlerFactory = handlerFactory;
         }
 
         public void Publish(TKey key, TMessage message)
@@ -24,7 +23,7 @@ namespace MessagePipePlayground.Sandbox
 
         public IDisposable Subscribe(TKey key, IMessageHandler<TMessage> handler, params MessageHandlerFilter<TMessage>[] filters)
         {
-            return core.Subscribe(key, handlerFactory.CreateMessageHandler(handler, filters));
+            return core.Subscribe(key, handler);
         }
     }
 
@@ -165,12 +164,10 @@ namespace MessagePipePlayground.Sandbox
     public sealed class MessageBroker<TMessage> : IPublisher<TMessage>, ISubscriber<TMessage>
     {
         readonly MessageBrokerCore<TMessage> core;
-        readonly FilterAttachedMessageHandlerFactory handlerFactory;
 
-        public MessageBroker(MessageBrokerCore<TMessage> core, FilterAttachedMessageHandlerFactory handlerFactory)
+        public MessageBroker(MessageBrokerCore<TMessage> core)
         {
             this.core = core;
-            this.handlerFactory = handlerFactory;
         }
 
         public void Publish(TMessage message)
@@ -180,7 +177,7 @@ namespace MessagePipePlayground.Sandbox
 
         public IDisposable Subscribe(IMessageHandler<TMessage> handler, params MessageHandlerFilter<TMessage>[] filters)
         {
-            return core.Subscribe(handlerFactory.CreateMessageHandler(handler, filters));
+            return core.Subscribe(handler);
         }
     }
 
